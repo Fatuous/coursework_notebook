@@ -16,22 +16,22 @@ public:
 		string phone;
 		int id;
 
-		data(){
+		data() {
 			id = 0;
 		}
 
-		data(string surname, string name, string phone, string birth) {
-			this->name = name;
-			this->surname = surname;
-			this->birth = birth;
-			this->phone = phone;
+		data(string s, string n, string p, string b) {
+			this->name = n;
+			this->surname = s;
+			this->birth = b;
+			this->phone = p;
 		}
 	};
-	
+
 	string letter;
 	data info;
 
-	map_pair(){}
+	map_pair() {}
 
 	map_pair(data key) {
 		this->letter = key.surname[0];
@@ -129,13 +129,13 @@ public:
 		if (key >= parent->key) {
 			if (parent->right)
 				push(parent->right, key);
-			else 
+			else
 				parent->right = new node(key, parent);
 		}
 		else {
 			if (parent->left)
 				push(parent->left, key);
-			else 
+			else
 				parent->left = new node(key, parent);
 		}
 	}
@@ -159,7 +159,7 @@ public:
 	void print() {
 		if (root)
 			print(root);
-		else 
+		else
 			cout << "Записи отсутствуют\n";
 	}
 
@@ -178,7 +178,7 @@ public:
 			|| key == parent->key.info.name
 			|| key == parent->key.info.surname
 			|| key == parent->key.info.phone
-			|| key == parent->key.letter) cout << parent->key;
+			|| tolower(key[0]) == tolower(parent->key.letter[0])) cout << parent->key;
 		if (parent->right)
 			find(parent->right, key);
 	}
@@ -188,9 +188,9 @@ public:
 	}
 
 	void save(node* x) {
-		ofstream fout ("data.txt");
+		ofstream fout("data.txt");
 		node* temp = nullptr;
-		
+
 		while (x != nullptr) {
 			if (temp == x->parent) {
 				if (x->left != nullptr) {
@@ -225,7 +225,7 @@ public:
 	void save() {
 		save(root);
 	}
-	
+
 	void load() {
 		ifstream fin("data.txt");
 		string s, name, surname, phone, birth;
@@ -252,39 +252,39 @@ public:
 
 	void find_id(node* parent, int id) {
 		if (parent->left)
-			 find_id(parent->left, id);
-		if (id == parent->key.info.id) { 
-			remove(parent); 
-			return; 
+			find_id(parent->left, id);
+		if (id == parent->key.info.id) {
+			remove(parent);
+			return;
 		}
 		if (parent->right)
-			 find_id(parent->right, id);
+			find_id(parent->right, id);
 	}
 
-	void remove(node* Node){
+	void remove(node* Node) {
 		if (Node->left == nullptr && Node->right == nullptr)
-			if (Node == root) 
+			if (Node == root)
 				root = nullptr;
-			else if (Node->parent->left == Node) 
+			else if (Node->parent->left == Node)
 				Node->parent->left = nullptr;
-			else 
+			else
 				Node->parent->right = nullptr;
 		else if (Node->left == nullptr || Node->right == nullptr) {
 			if (Node->left == nullptr) {
-				if (Node == root) 
+				if (Node == root)
 					root = root->right;
-				else if (Node->parent->left == Node) 
+				else if (Node->parent->left == Node)
 					Node->parent->left = Node->right;
-				else 
+				else
 					Node->parent->right = Node->right;
 				Node->right->parent = Node->parent;
 			}
 			else {
-				if (Node == root) 
+				if (Node == root)
 					root = root->left;
-				else if (Node->parent->left == Node) 
+				else if (Node->parent->left == Node)
 					Node->parent->left = Node->left;
-				else 
+				else
 					Node->parent->right = Node->left;
 				Node->left->parent = Node->parent;
 			}
@@ -293,10 +293,10 @@ public:
 			Node->key = getleft(Node)->key;
 			if (getleft(Node)->parent->left == getleft(Node))
 				getleft(Node)->parent->left = nullptr;
-			else 
+			else
 				getleft(Node)->parent->right = nullptr;
 		}
-	
+
 	}
 
 	node* getleft(node* Node) {
@@ -304,7 +304,7 @@ public:
 			return getleft(Node->left);
 		return Node;
 	}
-	
+
 	void remove() {
 		int id;
 		if (root) {
@@ -374,8 +374,8 @@ public:
 	void push_by_date(node* parent, map_pair& key) {
 		string datekey = key.info.birth;
 		string datethis = parent->key.info.birth;
-		if (datekey.substr(6) >= datethis.substr(6) 
-			|| (datekey.substr(6) == datethis.substr(6) 
+		if (datekey.substr(6) >= datethis.substr(6)
+			|| (datekey.substr(6) == datethis.substr(6)
 				&& datekey.substr(3) >= datethis.substr(3))
 			|| (datekey.substr(6) == datethis.substr(6)
 				&& datekey.substr(3) == datethis.substr(3)
@@ -429,15 +429,15 @@ public:
 
 		s = _getch();
 		switch (s) {
-			case '1':
-				sort_by_name(Stack);
-				break;
-			case '2':
-				sort_by_date(Stack);
-				break;
-			default:
-				sort();
-				break;
+		case '1':
+			sort_by_name(Stack);
+			break;
+		case '2':
+			sort_by_date(Stack);
+			break;
+		default:
+			sort();
+			break;
 		}
 	}
 };
@@ -488,7 +488,7 @@ int main() {
 
 		case '3':
 			menu();
-			m.load();			
+			m.load();
 			break;
 
 		case '4':
@@ -498,7 +498,6 @@ int main() {
 
 		case '5':
 			menu();
-			m.print_id(m.root);
 			cout << "Введите искомую фамилию / первую букву фамилии, имя, дату рождения или номер телефона: ";
 			cin >> name;
 			m.find(name);
@@ -523,6 +522,6 @@ int main() {
 			break;
 		}
 	}
-	
+
 	return 0;
 }
